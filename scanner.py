@@ -1,7 +1,8 @@
+#COMENTARIO
+
 from getopt import getopt
 from re import findall
 from sys import argv
-
 from requests import get
 
 
