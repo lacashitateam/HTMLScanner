@@ -5,15 +5,34 @@ from re import findall
 
 
 def scanner(url, regex):
+    """
+    :param url: Target URL
+    :param regex: Regex
+    :return: Array with ALL Found comments
+    """
     return findall(regex, get(url).text) if len(findall(regex, get(url).text)) > 0 else [chr(27) + "[0;31m" + "No Comments Found", ]
 
 
 def scanner_file_local(file, regex):
+    """
+    :param file: Local file with .html code or kind of that
+    :param regex: Regex
+    :return: Array with ALL Found comments
+    """
+
     with open(file, "r", errors="ignore") as code:
         return findall(regex, code.read()) if len(findall(regex, code.read())) > 0 else [chr(27) + "[0;31m" + "No Comments Found", ]
 
 
-def scanner_file(url, file, regex, delimeter="\n"):
+def scanner_file(url, file, regex, delimeter):
+    """
+    :param url: Target URL
+    :param file: File with URL Addons
+    :param regex: Regex
+    :param delimeter: Delimeter to split
+    :return: generator [addon, comment]
+    """
+
     with open(file, "r", errors="ignore") as code:
         for addon in code.read().split(delimeter):
             if len(addon) < 2: addon = "index.html"
@@ -64,6 +83,9 @@ Options:
     File: -f <file>
     Regex: -r <regex>
     Delimeter: -D <delimeter>
+    
+For more info look at:
+ https://github.com/lacashitateam/HTMLScanner
     
 """)
 
