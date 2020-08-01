@@ -31,7 +31,7 @@ And of course HTMLScanner itself is open source.
 
 ### Installation
 
-HTMLScanenr requires [Python3.x](https://www.python.org/downloads/) to run.
+HTMLScanner requires [Python3.x](https://www.python.org/downloads/) to run.
 
 Install the dependencies and start scanner.py.
 
