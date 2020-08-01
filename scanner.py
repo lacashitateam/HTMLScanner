@@ -11,7 +11,9 @@ def scanner(url, regex):
     :param regex: Regex
     :return: Array with ALL Found comments
     """
-    return findall(regex, get(url).text) if len(findall(regex, get(url).text)) > 0 else ["No Comments Found", ]
+
+    request = get(url, headers=HEADERS)
+    return findall(regex, request.text) if len(findall(regex, request.text)) > 0 else ["No Comments Found", ]
 
 
 def scanner_file_local(file, regex):
@@ -37,12 +39,14 @@ def scanner_file(url, file, regex, delimeter):
 
     with open(file, "r", errors="ignore") as code:
         for addon in code.read().split(delimeter):
+            request = get(url + addon, headers=HEADERS)
             if len(addon) < 2: addon = "index.html"
-            yield [addon, findall(regex, get(url + addon).text) if len(findall(regex, get(url + addon).text)) > 0 else ["No Comments Found", ]]  # YIELD EACH URL COMMENTS)
+            yield [addon, findall(regex, request.text) if len(findall(regex, request.text)) > 0 else ["No Comments Found", ]]  # YIELD EACH URL COMMENTS)
 
 
 URL = None
-REGEX = "<!---(.*?)--->"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
+REGEX = "<!--(.*?)-->"
 FILE = None
 DELIMETER = "\n"
 HELP = """
@@ -75,8 +79,9 @@ if __name__ == '__main__':
 
         if URL and not FILE:
             print(chr(27) + "[0;33m" + "Comments Found:")
-            for comment in scanner(URL, REGEX):
-                print(chr(27) + "[0;36m" + " 0) " + chr(27) + "[0;31m", comment) if comment == "No Comments Found" else print(chr(27) + "[0;36m" + " ", scanner(URL, REGEX).index(comment), ") ", comment)
+            commentArray = scanner(URL, REGEX)
+            for comment in commentArray:
+                print(chr(27) + "[0;36m" + " 0) " + chr(27) + "[0;31m", comment) if comment == "No Comments Found" else print(chr(27) + "[0;36m" + " ", commentArray.index(comment), ") ", comment)
 
         elif FILE and not URL:
             print(chr(27) + "[0;33m" + "Comments Found:")
@@ -96,4 +101,4 @@ if __name__ == '__main__':
 
     except Exception as Error:
         print(chr(27) + "[0;31mERROR: {0}".format(Error))
-        print(chr(27) + "[0;39m",HELP)
+        print(chr(27) + "[0;39m", HELP)
