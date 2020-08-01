@@ -88,7 +88,8 @@ For more info look at:
                 for comment_ in comment:
                     print(" ", comment.index(comment_), ") ", comment_)
                 print("\n")
-        raise ValueError
+        else:
+            raise ValueError
 
     except:
         print(HELP)
