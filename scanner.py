@@ -72,19 +72,19 @@ For more info look at:
                 DELIMETER = argument
 
         if not FILE and URL:
-            print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
+            print(chr(27) + "[0;33m" + "Comments Found:")
             for comment in scanner(URL, REGEX):
-                print(" ", scanner(URL, REGEX).index(comment), ") ", comment)
+                print(chr(27) + "[0;36m" + " ", scanner(URL, REGEX).index(comment), ") ", comment)
 
         elif FILE and not URL:
-            print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
+            print(chr(27) + "[0;33m" + "Comments Found:")
             for comment in scanner_file_local(FILE, REGEX):
-                print(" ", scanner_file_local(FILE, REGEX).index(comment), ") ", comment)
+                print(chr(27) + "[0;36m" + " ", scanner_file_local(FILE, REGEX).index(comment), ") ", comment)
 
         elif FILE and URL:
-            print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
+            print(chr(27) + "[0;33m" + "Comments Found:")
             for addon_, comment in scanner_file(URL, FILE, REGEX, DELIMETER):
-                print(addon_, ":")
+                print(chr(27) + "[0;36m" + addon_, ":")
                 for comment_ in comment:
                     print(" ", comment.index(comment_), ") ", comment_)
                 print("\n")
