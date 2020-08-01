@@ -1,7 +1,8 @@
-from sys import argv
 from getopt import getopt
-from requests import get
 from re import findall
+from sys import argv
+
+from requests import get
 
 
 def scanner(url, regex):
@@ -10,7 +11,7 @@ def scanner(url, regex):
     :param regex: Regex
     :return: Array with ALL Found comments
     """
-    return findall(regex, get(url).text) if len(findall(regex, get(url).text)) > 0 else [chr(27) + "[0;31m" + "No Comments Found", ]
+    return findall(regex, get(url).text) if len(findall(regex, get(url).text)) > 0 else ["No Comments Found", ]
 
 
 def scanner_file_local(file, regex):
@@ -21,7 +22,8 @@ def scanner_file_local(file, regex):
     """
 
     with open(file, "r", errors="ignore") as code:
-        return findall(regex, code.read()) if len(findall(regex, code.read())) > 0 else [chr(27) + "[0;31m" + "No Comments Found", ]
+        returnArray = findall(regex, code.read())
+        return returnArray if len(returnArray) > 0 else ["No Comments Found", ]
 
 
 def scanner_file(url, file, regex, delimeter):
@@ -36,7 +38,7 @@ def scanner_file(url, file, regex, delimeter):
     with open(file, "r", errors="ignore") as code:
         for addon in code.read().split(delimeter):
             if len(addon) < 2: addon = "index.html"
-            yield [addon, findall(regex, get(url + addon).text) if len(findall(regex, get(url + addon).text)) > 0 else [chr(27) + "[0;31m" + "No Comments Found", ]]  # YIELD EACH URL COMMENTS)
+            yield [addon, findall(regex, get(url + addon).text) if len(findall(regex, get(url + addon).text)) > 0 else ["No Comments Found", ]]  # YIELD EACH URL COMMENTS)
 
 
 URL = None
@@ -61,7 +63,7 @@ For more info look at:
 
 if __name__ == '__main__':
     try:
-        for option, argument in getopt(argv[1:], ":u:r:f:D:h")[0]:
+        for option, argument in getopt(argv[1:], "u:r:f:D:")[0]:
             if option == "-u":
                 URL = argument
             elif option == "-r":
@@ -71,25 +73,27 @@ if __name__ == '__main__':
             elif option == "-D":
                 DELIMETER = argument
 
-        if not FILE and URL:
+        if URL and not FILE:
             print(chr(27) + "[0;33m" + "Comments Found:")
             for comment in scanner(URL, REGEX):
-                print(chr(27) + "[0;36m" + " ", scanner(URL, REGEX).index(comment), ") ", comment)
+                print(chr(27) + "[0;36m" + " 0) " + chr(27) + "[0;31m", comment) if comment == "No Comments Found" else print(chr(27) + "[0;36m" + " ", scanner(URL, REGEX).index(comment), ") ", comment)
 
         elif FILE and not URL:
             print(chr(27) + "[0;33m" + "Comments Found:")
             for comment in scanner_file_local(FILE, REGEX):
-                print(chr(27) + "[0;36m" + " ", scanner_file_local(FILE, REGEX).index(comment), ") ", comment)
+                print(chr(27) + "[0;36m" + " 0) " + chr(27) + "[0;31m", comment) if comment == "No Comments Found" else print(chr(27) + "[0;36m" + " ", scanner_file_local(FILE, REGEX).index(comment), ") ", comment)
 
         elif FILE and URL:
             print(chr(27) + "[0;33m" + "Comments Found:")
             for addon_, comment in scanner_file(URL, FILE, REGEX, DELIMETER):
                 print(chr(27) + "[0;36m" + addon_, ":")
                 for comment_ in comment:
-                    print(" ", comment.index(comment_), ") ", comment_)
+                    print(chr(27) + "[0;36m" + " 0) " + chr(27) + "[0;31m", comment_) if comment_ == "No Comments Found" else print(chr(27) + "[0;36m" + " ", comment.index(comment_), ") ", comment_)
                 print("\n")
-        else:
-            raise ValueError
 
-    except:
-        print(HELP)
+        else:
+            raise Exception("Invalid Arguments")
+
+    except Exception as Error:
+        print(chr(27) + "[0;31mERROR: {0}".format(Error))
+        print(chr(27) + "[0;39m",HELP)
