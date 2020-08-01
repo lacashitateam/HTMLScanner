@@ -44,37 +44,7 @@ if __name__ == '__main__':
     REGEX = "<!---(.*?)--->"
     FILE = None
     DELIMETER = "\n"
-
-    for option, argument in getopt(argv[1:], ":u:r:f:D:")[0]:
-        if option == "-u":
-            URL = argument
-        elif option == "-r":
-            REGEX = argument
-        elif option == "-f":
-            FILE = argument
-        elif option == "-D":
-            DELIMETER = argument
-
-    if not FILE and URL:
-        print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
-        for comment in scanner(URL, REGEX):
-            print(" ", scanner(URL, REGEX).index(comment), ") ", comment)
-
-    elif FILE and not URL:
-        print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
-        for comment in scanner_file_local(FILE, REGEX):
-            print(" ", scanner_file_local(FILE, REGEX).index(comment), ") ", comment)
-
-    elif FILE and URL:
-        print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
-        for addon_, comment in scanner_file(URL, FILE, REGEX, DELIMETER):
-            print(addon_, ":")
-            for comment_ in comment:
-                print(" ", comment.index(comment_), ") ", comment_)
-            print("\n")
-
-    else:
-        print("""
+    HELP = """
 Usage:
     scanner.py -u <url> [options]
     scanner.py -f <file> [options]
@@ -86,6 +56,40 @@ Options:
     
 For more info look at:
  https://github.com/lacashitateam/HTMLScanner
+ https://lacashita.com/projects/HTMLScanner
     
-""")
+"""
 
+    try:
+        for option, argument in getopt(argv[1:], ":u:r:f:D:h")[0]:
+            if option == "-u":
+                URL = argument
+            elif option == "-r":
+                REGEX = argument
+            elif option == "-f":
+                FILE = argument
+            elif option == "-D":
+                DELIMETER = argument
+
+        if not FILE and URL:
+            print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
+            for comment in scanner(URL, REGEX):
+                print(" ", scanner(URL, REGEX).index(comment), ") ", comment)
+
+        elif FILE and not URL:
+            print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
+            for comment in scanner_file_local(FILE, REGEX):
+                print(" ", scanner_file_local(FILE, REGEX).index(comment), ") ", comment)
+
+        elif FILE and URL:
+            print(chr(27) + "[0;33m" + "Comments Found:" + chr(27) + "[0;36m")
+            for addon_, comment in scanner_file(URL, FILE, REGEX, DELIMETER):
+                print(addon_, ":")
+                for comment_ in comment:
+                    print(" ", comment.index(comment_), ") ", comment_)
+                print("\n")
+
+        else:
+            print(HELP)
+    except:
+        print(HELP)
