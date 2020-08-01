@@ -39,27 +39,27 @@ def scanner_file(url, file, regex, delimeter):
             yield [addon, findall(regex, get(url + addon).text) if len(findall(regex, get(url + addon).text)) > 0 else [chr(27) + "[0;31m" + "No Comments Found", ]]  # YIELD EACH URL COMMENTS)
 
 
-if __name__ == '__main__':
-    URL = None
-    REGEX = "<!---(.*?)--->"
-    FILE = None
-    DELIMETER = "\n"
-    HELP = """
+URL = None
+REGEX = "<!---(.*?)--->"
+FILE = None
+DELIMETER = "\n"
+HELP = """
 Usage:
     scanner.py -u <url> [options]
     scanner.py -f <file> [options]
-        
+
 Options:
     File: -f <file>
     Regex: -r <regex>
     Delimeter: -D <delimeter>
-    
+
 For more info look at:
  https://github.com/lacashitateam/HTMLScanner
  https://lacashita.com/projects/HTMLScanner
-    
+
 """
 
+if __name__ == '__main__':
     try:
         for option, argument in getopt(argv[1:], ":u:r:f:D:h")[0]:
             if option == "-u":
