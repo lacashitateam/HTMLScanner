@@ -45,12 +45,14 @@ For Web Scrapping on URL
 
 ```sh
 $ python3 scanner.py -u http://github.com/
+# This wil check for all comments on URL
 ```
 
 For Web Scrapping on URL + ADDONS
 
 ```sh
 $ python3 scanner.py -u http://github.com/ -f addonsList.txt
+
 # This wil check for all URL addons:
 #   http://github.com/addon1.html
 #   http://github.com/addon2.html
@@ -61,6 +63,17 @@ For Web Scrapping on FILE
 
 ```sh
 $ python3 scanner.py -f file.html
+# This wil check for all comments on FILE
+```
+
+For Port Scanner
+
+```sh
+$ python3 scanner.py -u 192.168.1.x -p 1 -P 255
+# This wil check for all open ports of a numeric ip:
+#   -u numeric ip
+#   -p Initial Port
+#   -P Last Port
 ```
 
 ### TODO
