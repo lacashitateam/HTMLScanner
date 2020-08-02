@@ -9,6 +9,7 @@ HTMLScanner is a web scapping regex based tool.
 
 # New Features!
 
+  - Port Scanner
   - Search for text on local files
   - Can be implemented to your projects
 
