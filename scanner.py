@@ -1,8 +1,9 @@
 from getopt import getopt
 from re import findall
-from sys import argv
-from requests import get
 from socket import socket, AF_INET, SOCK_STREAM
+from sys import argv
+
+from requests import get
 
 
 def scanner(url, regex):
@@ -47,7 +48,7 @@ def scanner_file(url, file, regex, delimeter):
 def portScanner(url, initialPort, lastPort):
     for port in range(initialPort, lastPort + 1):
         try:
-            yield port if not socket().connect_ex((url, port)) else "N/A"
+            yield port if not socket(AF_INET, SOCK_STREAM).connect_ex((url, port)) else "N/A"
 
         except KeyboardInterrupt:
             print(chr(27) + "\n\n[0;31mEXITING...")
