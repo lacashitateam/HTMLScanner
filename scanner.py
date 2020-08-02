@@ -2,6 +2,7 @@ from getopt import getopt
 from re import findall
 from sys import argv
 from requests import get
+from socket import socket, AF_INET, SOCK_STREAM
 
 
 def scanner(url, regex):
@@ -43,6 +44,19 @@ def scanner_file(url, file, regex, delimeter):
             yield [addon, findall(regex, request.text) if len(findall(regex, request.text)) > 0 else ["No Comments Found", ]]  # YIELD EACH URL COMMENTS)
 
 
+def portScanner(url, initialPort, lastPort):
+    for port in range(initialPort, lastPort + 1):
+        try:
+            yield port if not socket().connect_ex((url, port)) else "N/A"
+
+        except KeyboardInterrupt:
+            print(chr(27) + "\n\n[0;31mEXITING...")
+            exit()
+
+        except Exception:
+            pass
+
+
 URL = None
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
 REGEX = "<!--(.*?)-->"
@@ -52,21 +66,26 @@ HELP = """
 Usage:
     scanner.py -u <url> [options]
     scanner.py -f <file> [options]
+    scanner.py -u <ip> -p <port> -P <port>
 
 Options:
     File: -f <file>
     Regex: -r <regex>
     Delimeter: -D <delimeter>
+    Initial Port: -p <port>
+    Final Port: -P <port>
 
 For more info look at:
  https://github.com/lacashitateam/HTMLScanner
  https://lacashita.com/projects/HTMLScanner
 
 """
+PORT_START = None
+PORT_FINISH = None
 
 if __name__ == '__main__':
     try:
-        for option, argument in getopt(argv[1:], "u:r:f:D:")[0]:
+        for option, argument in getopt(argv[1:], "u:r:f:D:p:P:")[0]:
             if option == "-u":
                 URL = argument
             elif option == "-r":
@@ -75,8 +94,17 @@ if __name__ == '__main__':
                 FILE = argument
             elif option == "-D":
                 DELIMETER = argument
+            elif option == "-p":
+                PORT_START = int(argument)
+            elif option == "-P":
+                PORT_FINISH = int(argument)
 
-        if URL and not FILE:
+        if URL and PORT_START and PORT_FINISH:
+            print(chr(27) + "[0;33m" + "Open Ports:")
+            for port in portScanner(URL, PORT_START, PORT_FINISH):
+                if port != "N/A": print(chr(27) + "[0;36m" + " ", port, ") OPEN")
+
+        elif URL and not FILE:
             print(chr(27) + "[0;33m" + "Comments Found:")
             commentArray = scanner(URL, REGEX)
             for comment in commentArray:
