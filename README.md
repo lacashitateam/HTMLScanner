@@ -9,7 +9,7 @@ HTMLScanner is a web scapping regex based tool.
 
 # New Features!
 
-  - Port Scanner
+  - Port Scanner *(New Logic)*
   - Search for text on local files
   - Can be implemented to your projects
 
@@ -27,6 +27,7 @@ HTMLScanner uses a number of open source projects to work properly:
 * [Requests] - Elegant and simple HTTP library for Python, built for human beings.
 * [Getopt] - C-style parser for command line options.
 * [Re] - Regular expression operations.
+* [Nmap] -  Nmap in any of your python pentesting projects.
 
 And of course HTMLScanner itself is open source.
 
