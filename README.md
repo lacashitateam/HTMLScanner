@@ -33,13 +33,22 @@ And of course HTMLScanner itself is open source.
 
 ### Installation
 
-HTMLScanner requires [Python3.x](https://www.python.org/downloads/) to run.
+HTMLScanner requires [Python3.x](https://www.python.org/downloads/)
+and [Nmap](https://nmap.org/) to run.
 
-Install the dependencies and start scanner.py.
+Install the dependencies,nmap and start scanner.py.
 
 ```sh
+LINUX:
 $ cd HTMLScanner
 $ python3 -m pip install -r requirements.txt
+$ apt install nmap
+$ python3 scanner.py
+
+WINDOWS:
+$ cd HTMLScanner
+$ python3 -m pip install -r requirements.txt
+# Install nmap from https://nmap.org/
 $ python3 scanner.py
 ```
 

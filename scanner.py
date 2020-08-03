@@ -46,6 +46,12 @@ def scanner_file(url, file, regex, delimeter):
 
 
 def portScanner(url, initialPort, lastPort):
+    """
+    :param url: Target URL
+    :param initialPort: Initial Port to scan
+    :param lastPort: Last Port to scan
+    :return: port, port status
+    """
     for port in range(initialPort, lastPort + 1):
         try:
             yield port, PortScanner().scan(url, str(port))['scan'][url]['tcp'][port]['state']
