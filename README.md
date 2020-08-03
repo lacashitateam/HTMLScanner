@@ -78,6 +78,23 @@ $ python3 scanner.py -u 192.168.1.x -p 1 -P 255
 #   -P Last Port
 ```
 
+### USAGE MENU
+```sh
+Usage:
+    scanner.py -u <url> [options]
+    scanner.py -f <file> [options]
+    scanner.py -u <ip> -p <port> -P <port>
+
+Options:
+    File: -f <file>
+    Regex: -r <regex>
+    Delimeter: -D <delimeter>
+    Initial Port: -p <port> | --initial-port <port>
+    Final Port: -P <port> | --final-port <port>
+    Show Ports: --show-ports <all/open/closed/filtered>
+```
+
+
 ### TODO
 
  - Update regex support
