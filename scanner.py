@@ -103,7 +103,7 @@ if __name__ == '__main__':
         if URL and PORT_START and PORT_FINISH:
             print(chr(27) + "[0;33m" + "Open Ports:")
             for port, status in portScanner(URL, PORT_START, PORT_FINISH):
-                print(chr(27) + "[0;36m Port ", port, ") ", status.upper()) if not "filtered" in status else ""
+                print(chr(27) + "[0;36m Port ", port, ") ", status.upper()) if not "filtered" in status or not "closed" in status else ""
 
         elif URL and not FILE:
             print(chr(27) + "[0;33m" + "Comments Found:")
