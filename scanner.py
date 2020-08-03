@@ -73,8 +73,9 @@ Options:
     File: -f <file>
     Regex: -r <regex>
     Delimeter: -D <delimeter>
-    Initial Port: -p <port>
-    Final Port: -P <port>
+    Initial Port: -p <port> | --initial-port <port>
+    Final Port: -P <port> | --final-port <port>
+    Show Ports: --show-ports <all/open/closed/filtered>
 
 For more info look at:
  https://github.com/lacashitateam/HTMLScanner
@@ -83,10 +84,11 @@ For more info look at:
 """
 PORT_START = None
 PORT_FINISH = None
+SHOW_PORTS = "open"
 
 if __name__ == '__main__':
     try:
-        for option, argument in getopt(argv[1:], "u:r:f:D:p:P:")[0]:
+        for option, argument in getopt(argv[1:], "u:r:f:D:p:P:",["initial-port=","final-port=","show-ports="])[0]:
             if option == "-u":
                 URL = argument
             elif option == "-r":
@@ -95,15 +97,17 @@ if __name__ == '__main__':
                 FILE = argument
             elif option == "-D":
                 DELIMETER = argument
-            elif option == "-p":
+            elif option in ["-p","--initial-port"]:
                 PORT_START = int(argument)
-            elif option == "-P":
+            elif option in ["-P","--final-port"]:
                 PORT_FINISH = int(argument)
+            elif option == "--show-ports":
+                SHOW_PORTS = argument.lower()
 
         if URL and PORT_START and PORT_FINISH:
             print(chr(27) + "[0;33m" + "Open Ports:")
             for port, status in portScanner(URL, PORT_START, PORT_FINISH):
-                print(chr(27) + "[0;36m Port ", port, ") ", status.upper()) if not "filtered" in status or not "closed" in status else ""
+                print(chr(27) + "[0;36m Port ", port, ") ", status.upper()) if status == SHOW_PORTS or SHOW_PORTS == "all" else ""
 
         elif URL and not FILE:
             print(chr(27) + "[0;33m" + "Comments Found:")
