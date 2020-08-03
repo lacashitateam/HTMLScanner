@@ -1,8 +1,8 @@
 from getopt import getopt
 from re import findall
-from socket import socket, AF_INET, SOCK_STREAM
 from sys import argv
 
+from nmap import PortScanner
 from requests import get
 
 
@@ -48,7 +48,7 @@ def scanner_file(url, file, regex, delimeter):
 def portScanner(url, initialPort, lastPort):
     for port in range(initialPort, lastPort + 1):
         try:
-            yield port if not socket(AF_INET, SOCK_STREAM).connect_ex((url, port)) else "N/A"
+            yield port, PortScanner().scan(url, str(port))['scan'][url]['tcp'][port]['state']
 
         except KeyboardInterrupt:
             print(chr(27) + "\n\n[0;31mEXITING...")
@@ -102,8 +102,8 @@ if __name__ == '__main__':
 
         if URL and PORT_START and PORT_FINISH:
             print(chr(27) + "[0;33m" + "Open Ports:")
-            for port in portScanner(URL, PORT_START, PORT_FINISH):
-                if port != "N/A": print(chr(27) + "[0;36m" + " ", port, ") OPEN")
+            for port, status in portScanner(URL, PORT_START, PORT_FINISH):
+                print(chr(27) + "[0;36m Port ", port, ") ", status.upper()) if not "filtered" in status else ""
 
         elif URL and not FILE:
             print(chr(27) + "[0;33m" + "Comments Found:")
@@ -130,3 +130,7 @@ if __name__ == '__main__':
     except Exception as Error:
         print(chr(27) + "[0;31mERROR: {0}".format(Error))
         print(chr(27) + "[0;39m", HELP)
+
+    except KeyboardInterrupt:
+        print(chr(27) + "\n\n[0;31mEXITING...")
+        exit()
